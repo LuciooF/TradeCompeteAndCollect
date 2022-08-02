@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import connection
 import mysql.connector
 import os
@@ -14,22 +15,23 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 # cursor.execute("CREATE TABLE Card (veefriend VARCHAR(50), score smallint, aura smallint UNSIGNED, skill smallint UNSIGNED, stamina smallint UNSIGNED, rarity ENUM ('core','rare','veryrare','epic','spec','vf1edition','giftgoat','auto'), cardID int PRIMARY KEY AUTO_INCREMENT)")
-# cursor.execute("CREATE TABLE User (userId INT unsigned NOT NULL AUTO_INCREMENT,username VARCHAR(50) NOT NULL,isDiscordVerified BOOLEAN NOT NULL,PRIMARY KEY (userId));")
-# cursor.execute("CREATE TABLE UserCards (cardId INT NOT NULL, userId INT NOT NULL, FOREIGN KEY (cardId) REFERENCES Card (cardId), FOREIGN KEY (userId) REFERENCES User (userId))")
-#cursor.execute("ALTER TABLE user ADD UNIQUE (username)")
+# cursor.execute("CREATE TABLE User (userId INT unsigned NOT NULL AUTO_INCREMENT,username VARCHAR(50) NOT NULL UNIQUE,isDiscordVerified BOOLEAN NOT NULL,PRIMARY KEY (userId));")
+# cursor.execute("CREATE TABLE UserCards (cardId INT NOT NULL, userId INT NOT NULL, FOREIGN KEY (cardId) REFERENCES Card (cardId), FOREIGN KEY (userId) REFERENCES User (userId) ON DELETE CASCADE)")
+
+
 #actual database queries
 def create_user(username, isDiscordVerified):
     cursor.execute("INSERT INTO user (username, isDiscordVerified) VALUES (%s,%s)", (username,isDiscordVerified))
     db.commit()
     createdUserId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM user WHERE userId = {createdUserId}")
-    return map_user(cursor)
+    return map_user(cursor)[0]
 def create_card(veefriend, score, aura, skill,stamina,rarity):
     cursor.execute("INSERT INTO card (veefriend, score, aura, skill, stamina, rarity) VALUES (%s,%s,%s,%s,%s,%s)", (veefriend,score,aura,skill,stamina,rarity))
     db.commit()
     createdCardId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM card WHERE cardId = {createdCardId}")
-    return map_cards(cursor)
+    return map_cards(cursor)[0]
 def add_card_to_user(userId, cardId):
     cursor.execute("INSERT INTO usercards (userId, cardId) VALUES (%s,%s)", (userId,cardId))
     db.commit()
@@ -89,13 +91,12 @@ class CardRarity(Enum):
 
 
 #Testing normal functionality
-user = create_user("LuciooF2", False)
-#card = create_card("Lemur",50,20,10,5,CardRarity.RARE.value)
-#add_card_to_user(3,7)
-# remove_card_from_user(3,7)
-# remove_user(3)
-# print("s")
-#interpretator
+# user = create_user(str(datetime.now()), False)
+# card = create_card("Lemur",50,20,10,5,CardRarity.RARE.value)
+# print(f"Adding card id {card.cardId} to user {user.userId}")
+# add_card_to_user(user.userId,card.cardId)
+# remove_card_from_user(user.userId,card.cardId)
+# remove_user(user.userId)
 
 
 
