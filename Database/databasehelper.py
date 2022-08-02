@@ -1,5 +1,6 @@
 import mysql.connector
 import os
+from enum import Enum
 import pandas as pd
 from dotenv import load_dotenv
 load_dotenv()
@@ -32,17 +33,13 @@ def remove_user(userId):
     cursor.execute(f"DELETE FROM user WHERE userId={userId}")
     db.commit()
 def get_user(userId):
-    cursor.execute(f"SELECT * FROM user WHERE userId={userId}")
-    db.commit()
+    return map_user(cursor.execute(f"SELECT * FROM user WHERE userId={userId}"))
 def get_card(cardId):
-    cursor.execute(f"SELECT * FROM card WHERE cardId={cardId}")
-    db.commit()
+    return map_cards(cursor.execute(f"SELECT * FROM card WHERE cardId={cardId}"))
 def get_all_cards_for_user(userId):
-    cursor.execute(f"SELECT * FROM usercards WHERE userId={userId}")
-    db.commit()
+    return map_cards(cursor.execute(f"SELECT * FROM usercards WHERE userId={userId}"))
 def get_all_cards():
-    cursor.execute(f"SELECT * FROM card")
-    db.commit()
+    return map_cards(cursor.execute(f"SELECT * FROM card"))
 
 #mapping
 def map_user(cursorUserResult):
@@ -56,7 +53,7 @@ def map_user(cursorUserResult):
             }
         )
     return users
-def map_card(cursorCardResult):
+def map_cards(cursorCardResult):
     cards = [] 
     for x in cursorCardResult:
         cards.append(
@@ -71,8 +68,22 @@ def map_card(cursorCardResult):
             }
         )
     return cards
-cursor.execute("SELECT * FROM card")
-allcards = map_card(cursor)
+class CardRarity(Enum):
+    CORE = 1
+    RARE = 2
+    VERYRARE = 3
+    EPIC = 4
+    SPEC = 5
+    VF1EDITION = 6
+    GIFTGOAT = 7
+    AUTO = 8
+
+
+#user = create_user("LuciooF2", False)
+#card = create_card("Lemur",50,20,10,5,CardRarity.RARE.value)
+#add_card_to_user(3,7)
+remove_card_from_user(3,7)
+remove_user(3)
 print("s")
 #interpretator
 
