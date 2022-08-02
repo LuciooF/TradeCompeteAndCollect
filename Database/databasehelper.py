@@ -45,29 +45,30 @@ def get_all_cards():
 def map_user(cursorUserResult):
     users = [] 
     for x in cursorUserResult:
-        users.append(
-            {
-                "userId": x[0],
-                "username": x[1],
-                "isDiscordVerified" : bool(x[2])
-            }
-        )
+        users.append(User(x[0],x[1],bool(x[2])))
     return users
 def map_cards(cursorCardResult):
     cards = [] 
     for x in cursorCardResult:
-        cards.append(
-            {
-                "cardId": x[5],
-                "veefriend": x[0],
-                "score" : x[1],
-                "aura" : x[2],
-                "skill" : x[3],
-                "stamina" : x[4],
-                "rarity" : x[6]
-            }
-        )
+        cards.append(Card(x[5],x[0],x[1],x[2],x[3],x[4],x[6]))
     return cards
+
+#classes
+class Card: 
+    def __init__(self, cardId,veefriend,score,aura,skill,stamina,rarity):
+        self.cardId = cardId
+        self.veefriend = veefriend
+        self.score = score
+        self.aura = aura
+        self.skill = skill
+        self.stamina = stamina
+        self.rarity = rarity
+class User:
+    def __init__(self,userId, username, isDiscordVerified):
+        self.userId = userId
+        self.username = username
+        self.isDiscordVerified = isDiscordVerified
+#enums
 class CardRarity(Enum):
     CORE = 1
     RARE = 2
