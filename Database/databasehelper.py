@@ -14,8 +14,8 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor()
 
-def create_user(username, isDiscordVerified):
-    cursor.execute("INSERT INTO user (username, isDiscordVerified) VALUES (%s,%s)", (username,isDiscordVerified))
+def create_user(username, discordId):
+    cursor.execute("INSERT INTO user (username, discordid) VALUES (%s,%s)", (username,discordId))
     db.commit()
     createdUserId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM user WHERE userId = {createdUserId}")

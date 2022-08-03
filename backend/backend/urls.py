@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('discordlogin/', views.discord_login),
+    path('', views.home),
+    path('oauth/callback/', views.callback),
+    path('logout/', views.logout),
+    path('searchcreatetemporaryuser/', views.search_create_temporary_user),
+    path('searchcreatediscorduser/', views.search_create_discord_user)
 ]
