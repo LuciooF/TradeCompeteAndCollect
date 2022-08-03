@@ -58,7 +58,7 @@ CREATE TABLE user
   (
      userid            INT PRIMARY KEY auto_increment,
      username          VARCHAR(100) NOT NULL UNIQUE,
-     isdiscordverified BOOLEAN NOT NULL
+     discordid         VARCHAR(100) UNIQUE
   ); 
 ```
 ```sql
