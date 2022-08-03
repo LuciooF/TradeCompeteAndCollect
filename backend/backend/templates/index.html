@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        {% if current_user%}
+        <p>Logged in!</p>
+        <a href='/logout'><button>Logout</button></a>
+        {%else%}
+        <a href={{oath_url}}><button>Login with Discord</button></a>
+        <br>
+        <br>
+        <p>Search / Create new temporary user (Temporary users are deleted every day, to save your deck permanently, connect with discord)</p>
+        <input type="text" placeholder="Username" id="userSearchId"><input type="button" value="Click me" onclick="searchOrCreateUser()">
+        {%endif%}
+    </body>
+</html>
+<script>
+    function searchOrCreateUser(){
+        var userId = document.getElementById("userSearchId").value;
+        if (userId.length === 0){
+            return
+        }
+        else{
+            var url = "/searchcreatetemporaryuser?username="+userId;
+            window.location=url;
+        }
+    }
+</script>
