@@ -79,3 +79,5 @@ empty_cards_table()
 to clear the cards table each time this is ran.
 
 Now execute populateCardsScript.py to populate the cards table with some data (This data is currently not full, but it is good enough for testing)
+
+pip install all required packages
