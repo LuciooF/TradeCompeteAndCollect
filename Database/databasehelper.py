@@ -8,19 +8,12 @@ from dotenv import load_dotenv
 load_dotenv()
 db = mysql.connector.connect(
     host="localhost",
-    user="root",
+    user=os.getenv("DBUSER"),
     passwd = os.getenv("DBPASSWORD"),
-    database="test"
+    database=os.getenv("DBNAME")
 )
 cursor = db.cursor()
 
-#initial db setup
-# cursor.execute("CREATE TABLE Card (veefriend VARCHAR(100), coreImageLink VARCHAR(100), score smallint, aura smallint UNSIGNED, skill smallint UNSIGNED, stamina smallint UNSIGNED, rarity ENUM ('core','rare','veryrare','epic','spec','vf1edition','giftgoat','auto'), cardId int PRIMARY KEY AUTO_INCREMENT)")
-# cursor.execute("CREATE TABLE User (userId INT PRIMARY KEY AUTO_INCREMENT,username VARCHAR(50) NOT NULL UNIQUE,isDiscordVerified BOOLEAN NOT NULL);")
-# cursor.execute("CREATE TABLE UserCards (cardId INT, userId INT, FOREIGN KEY (cardId) REFERENCES Card (cardId), FOREIGN KEY (userId) REFERENCES User (userId) ON DELETE CASCADE)")
-
-
-#actual database queries
 def create_user(username, isDiscordVerified):
     cursor.execute("INSERT INTO user (username, isDiscordVerified) VALUES (%s,%s)", (username,isDiscordVerified))
     db.commit()
@@ -52,6 +45,7 @@ def get_all_cards():
     return map_cards(cursor.execute(f"SELECT * FROM card"))
 def empty_cards_table():
     cursor.execute("DELETE FROM card")
+
 #mapping
 def map_user(cursorUserResult):
     users = [] 
@@ -89,33 +83,3 @@ class CardRarity(Enum):
     VF1EDITION = 6
     GIFTGOAT = 7
     AUTO = 8
-
-
-
-#Testing normal functionality
-# user = create_user(str(datetime.now()), False)
-# card = create_card("Lemur",50,20,10,5,CardRarity.RARE.value)
-# print(f"Adding card id {card.cardId} to user {user.userId}")
-# add_card_to_user(user.userId,card.cardId)
-# remove_card_from_user(user.userId,card.cardId)
-# remove_user(user.userId)
-
-
-
-
-
-
-
-
-# print("\nUser Table")
-# cursor.execute("DESCRIBE User")
-# for x in cursor:
-#     print(x)
-# print("\nCard Table")
-# cursor.execute("DESCRIBE Card")
-# for x in cursor:
-#     print(x)
-# print("\nUserCards Table")
-# cursor.execute("DESCRIBE UserCards")
-# for x in cursor:
-#     print(x)
