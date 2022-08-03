@@ -10,13 +10,14 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd = os.getenv("DBPASSWORD"),
-    database="CCTEST"
+    database="test"
 )
 cursor = db.cursor()
 
-# cursor.execute("CREATE TABLE Card (veefriend VARCHAR(50), score smallint, aura smallint UNSIGNED, skill smallint UNSIGNED, stamina smallint UNSIGNED, rarity ENUM ('core','rare','veryrare','epic','spec','vf1edition','giftgoat','auto'), cardID int PRIMARY KEY AUTO_INCREMENT)")
-# cursor.execute("CREATE TABLE User (userId INT unsigned NOT NULL AUTO_INCREMENT,username VARCHAR(50) NOT NULL UNIQUE,isDiscordVerified BOOLEAN NOT NULL,PRIMARY KEY (userId));")
-# cursor.execute("CREATE TABLE UserCards (cardId INT NOT NULL, userId INT NOT NULL, FOREIGN KEY (cardId) REFERENCES Card (cardId), FOREIGN KEY (userId) REFERENCES User (userId) ON DELETE CASCADE)")
+#initial db setup
+# cursor.execute("CREATE TABLE Card (veefriend VARCHAR(100), coreImageLink VARCHAR(100), score smallint, aura smallint UNSIGNED, skill smallint UNSIGNED, stamina smallint UNSIGNED, rarity ENUM ('core','rare','veryrare','epic','spec','vf1edition','giftgoat','auto'), cardId int PRIMARY KEY AUTO_INCREMENT)")
+# cursor.execute("CREATE TABLE User (userId INT PRIMARY KEY AUTO_INCREMENT,username VARCHAR(50) NOT NULL UNIQUE,isDiscordVerified BOOLEAN NOT NULL);")
+# cursor.execute("CREATE TABLE UserCards (cardId INT, userId INT, FOREIGN KEY (cardId) REFERENCES Card (cardId), FOREIGN KEY (userId) REFERENCES User (userId) ON DELETE CASCADE)")
 
 
 #actual database queries
@@ -26,8 +27,8 @@ def create_user(username, isDiscordVerified):
     createdUserId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM user WHERE userId = {createdUserId}")
     return map_user(cursor)[0]
-def create_card(veefriend, score, aura, skill,stamina,rarity):
-    cursor.execute("INSERT INTO card (veefriend, score, aura, skill, stamina, rarity) VALUES (%s,%s,%s,%s,%s,%s)", (veefriend,score,aura,skill,stamina,rarity))
+def create_card(veefriend, score, aura, skill,stamina,rarity, coreImageLink):
+    cursor.execute("INSERT INTO card (veefriend, score, aura, skill, stamina, rarity, coreImageLink) VALUES (%s,%s,%s,%s,%s,%s,%s)", (veefriend,score,aura,skill,stamina,rarity,coreImageLink))
     db.commit()
     createdCardId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM card WHERE cardId = {createdCardId}")
@@ -49,7 +50,8 @@ def get_all_cards_for_user(userId):
     return map_cards(cursor.execute(f"SELECT * FROM usercards WHERE userId={userId}"))
 def get_all_cards():
     return map_cards(cursor.execute(f"SELECT * FROM card"))
-
+def empty_cards_table():
+    cursor.execute("DELETE FROM card")
 #mapping
 def map_user(cursorUserResult):
     users = [] 
