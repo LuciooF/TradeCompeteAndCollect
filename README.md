@@ -1,13 +1,13 @@
 
 # TradeCompeteAndCollect
 
-This project is an OpenSource project with very basic (junior leve) code to create a 
+This project is an OpenSource project with very basic (junior level) code to create a 
 simple website with the goal of easing the trade process of Compete And Collect cards (These are cards related to GaryVee and his Veefriends NFT project.)
 
 
 The idea is to have a simple website where you can show what cards you have in your deck, and you can share this to anyone who wants to trade with you, they can create their deck and you can compare, and get to a deal.
 
-There will be, also, filtering to ease the process. Like, you can compare between to decks, and filter what cards you have, that the other person doesnt, and viceversa.
+There will be, also, filtering to ease the process. Like, you can compare between two decks, and filter what cards you have, that the other person doesnt, and viceversa.
 
 
 ## Features
@@ -28,7 +28,7 @@ Create a dev branch and have fun with it!
 
 ## Setup
 
-To get this set up, download mySql, setup as default, take note of your host, password and database name
+To get this set up, download MySQL, setup as default, take note of your host, password and database name
 
 Create a .env file with the following
 ```env
@@ -42,7 +42,7 @@ CREATE TABLE card
   (
      veefriend     VARCHAR(100),
      coreimagelink VARCHAR(100),
-     score         SMALLINT,
+     score         SMALLINT UNSIGNED,
      aura          SMALLINT UNSIGNED,
      skill         SMALLINT UNSIGNED,
      stamina       SMALLINT UNSIGNED,
@@ -57,7 +57,7 @@ CREATE TABLE card
 CREATE TABLE user
   (
      userid            INT PRIMARY KEY auto_increment,
-     username          VARCHAR(50) NOT NULL UNIQUE,
+     username          VARCHAR(100) NOT NULL UNIQUE,
      isdiscordverified BOOLEAN NOT NULL
   ); 
 ```
@@ -70,4 +70,12 @@ CREATE TABLE usercards
      FOREIGN KEY (userid) REFERENCES USER (userid) ON DELETE CASCADE
   ) 
 ```
+In MySQL go to Edit>Preferences... Untick "Safe updates(Rejects updates and Deletes with no restrictions) 
 
+This is to allow
+```python
+empty_cards_table()
+```
+to clear the cards table each time this is ran.
+
+Now execute populateCardsScript.py to populate the cards table with some data (This data is currently not full, but it is good enough for testing)
