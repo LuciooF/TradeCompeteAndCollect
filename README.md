@@ -30,12 +30,8 @@ Create a dev branch and have fun with it!
 
 To get this set up, download MySQL, setup as default, take note of your host, password and database name
 
-Create a .env file with the following
-```env
-DBUSER=(YourDBUser)
-DBNAME=(YourDBName)
-DBPASSWORD=(YourDBPassowrd)
-```
+Change remove the .example from .env.example file and fill out those variables with your personal keys.
+
 In MySQL workbench, run the following queries (In this order)
 ```sql
 CREATE TABLE card
