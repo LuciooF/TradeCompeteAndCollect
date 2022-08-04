@@ -46,10 +46,7 @@ CREATE TABLE card
      aura          SMALLINT UNSIGNED,
      skill         SMALLINT UNSIGNED,
      stamina       SMALLINT UNSIGNED,
-     rarity        ENUM ('core', 'rare', 'veryrare', 'epic', 'spec',
-     'vf1edition',
-     'giftgoat',
-     'auto'),
+     
      cardid        INT PRIMARY KEY auto_increment
   ); 
 ```
@@ -66,6 +63,10 @@ CREATE TABLE usercards
   (
      cardid INT,
      userid INT,
+     rarity        ENUM ('core', 'rare', 'veryrare', 'epic', 'spec',
+     'vf1edition',
+     'giftgoat',
+     'auto'),
      FOREIGN KEY (cardid) REFERENCES card (cardid),
      FOREIGN KEY (userid) REFERENCES USER (userid) ON DELETE CASCADE
   ) 
