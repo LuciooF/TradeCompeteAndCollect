@@ -21,8 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('discordlogin/', views.discord_login),
     path('', views.home),
-    path('oauth/callback/', views.callback),
+    path('oauth/callback/', views.discord_login_callback),
     path('logout/', views.logout),
     path('searchcreatetemporaryuser/', views.search_create_temporary_user),
-    path('searchcreatediscorduser/', views.search_create_discord_user)
+    path('profile/', views.profile),
 ]

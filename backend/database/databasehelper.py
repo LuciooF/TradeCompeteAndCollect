@@ -6,13 +6,14 @@ from enum import Enum
 import pandas as pd
 from dotenv import load_dotenv
 load_dotenv()
+
 db = mysql.connector.connect(
     host="localhost",
     user=os.getenv("DBUSER"),
     passwd = os.getenv("DBPASSWORD"),
     database=os.getenv("DBNAME")
 )
-cursor = db.cursor()
+cursor = db.cursor(buffered=True)
 
 def create_user(username, discordId):
     cursor.execute("INSERT INTO user (username, discordid) VALUES (%s,%s)", (username,discordId))
@@ -20,8 +21,8 @@ def create_user(username, discordId):
     createdUserId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM user WHERE userId = {createdUserId}")
     return map_user(cursor)[0]
-def create_card(veefriend, score, aura, skill,stamina,rarity, coreImageLink):
-    cursor.execute("INSERT INTO card (veefriend, score, aura, skill, stamina, rarity, coreImageLink) VALUES (%s,%s,%s,%s,%s,%s,%s)", (veefriend,score,aura,skill,stamina,rarity,coreImageLink))
+def create_card(veefriend, score, aura, skill,stamina, coreImageLink):
+    cursor.execute("INSERT INTO card (veefriend, score, aura, skill, stamina, coreImageLink) VALUES (%s,%s,%s,%s,%s,%s)", (veefriend,score,aura,skill,stamina,coreImageLink))
     db.commit()
     createdCardId = cursor.lastrowid
     cursor.execute(f"SELECT * FROM card WHERE cardId = {createdCardId}")
@@ -36,7 +37,14 @@ def remove_user(userId):
     cursor.execute(f"DELETE FROM user WHERE userId={userId}")
     db.commit()
 def get_user(userId):
-    return map_user(cursor.execute(f"SELECT * FROM user WHERE userId={userId}"))
+    cursor.execute(f"SELECT * FROM user WHERE userId={userId}")
+    results = map_user(cursor)
+    return results[0]
+def get_user_by_discord_id(discordId):
+    query = f"SELECT * FROM user WHERE discordId={discordId}"
+    cursor.execute(query)
+    allResults = map_user(cursor)
+    return allResults[0]
 def get_card(cardId):
     return map_cards(cursor.execute(f"SELECT * FROM card WHERE cardId={cardId}"))
 def get_all_cards_for_user(userId):
@@ -48,26 +56,38 @@ def empty_cards_table():
 
 #mapping
 def map_user(cursorUserResult):
-    users = [] 
-    for x in cursorUserResult:
-        users.append(User(x[0],x[1],bool(x[2])))
-    return users
+    if cursorUserResult:
+        users = [] 
+        for x in cursorUserResult:
+            users.append(User(x[0],x[1],bool(x[2])))
+        return users
+    else:
+        print("Cursor returned no values")
+        return None
 def map_cards(cursorCardResult):
-    cards = [] 
-    for x in cursorCardResult:
-        cards.append(Card(x[5],x[0],x[1],x[2],x[3],x[4],x[6]))
-    return cards
+    
+    if cursorCardResult:
+        cards = [] 
+        for x in cursorCardResult:
+            cards.append(Card(x[6],x[0],x[1],x[2],x[3],x[4],x[6]))
+        return cards
+    else:
+        print("Cursor returned no values")
+        return None
 
 #classes
 class Card: 
-    def __init__(self, cardId,veefriend,score,aura,skill,stamina,rarity):
+    def __init__(self, cardId,veefriend,coreImageLink,score,aura,skill,stamina):
         self.cardId = cardId
         self.veefriend = veefriend
+        self.coreImageLink = coreImageLink
         self.score = score
         self.aura = aura
         self.skill = skill
         self.stamina = stamina
-        self.rarity = rarity
+        
+        
+        
 class User:
     def __init__(self,userId, username, isDiscordVerified):
         self.userId = userId
@@ -83,3 +103,6 @@ class CardRarity(Enum):
     VF1EDITION = 6
     GIFTGOAT = 7
     AUTO = 8
+
+# user = get_user_by_discord_id("209417071845441536")
+# print("x")

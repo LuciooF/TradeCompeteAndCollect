@@ -19,7 +19,7 @@ To activate the virtual environment for linux/Mac OS:
 
 For windows:
 
-- env_name/script
+- env_name/scripts
 - activate
 
 
