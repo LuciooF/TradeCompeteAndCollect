@@ -46,7 +46,6 @@ CREATE TABLE card
      aura          SMALLINT UNSIGNED,
      skill         SMALLINT UNSIGNED,
      stamina       SMALLINT UNSIGNED,
-     
      cardid        INT PRIMARY KEY auto_increment
   ); 
 ```
