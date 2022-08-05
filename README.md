@@ -121,3 +121,11 @@ To run our migrations:
 
 - python manage.py runserver
 
+
+## Frontend
+First, you should have vue installed locally, if not run, npm install -g @vue/cli
+
+To run the frontend: (default port 8080)
+
+- cd frontend && yarn install
+- yarn run serve
