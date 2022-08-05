@@ -30,12 +30,8 @@ Create a dev branch and have fun with it!
 
 To get this set up, download MySQL, setup as default, take note of your host, password and database name
 
-Create a .env file with the following
-```env
-DBUSER=(YourDBUser)
-DBNAME=(YourDBName)
-DBPASSWORD=(YourDBPassowrd)
-```
+Change remove the .example from .env.example file and fill out those variables with your personal keys.
+
 In MySQL workbench, run the following queries (In this order)
 ```sql
 CREATE TABLE card
@@ -46,10 +42,6 @@ CREATE TABLE card
      aura          SMALLINT UNSIGNED,
      skill         SMALLINT UNSIGNED,
      stamina       SMALLINT UNSIGNED,
-     rarity        ENUM ('core', 'rare', 'veryrare', 'epic', 'spec',
-     'vf1edition',
-     'giftgoat',
-     'auto'),
      cardid        INT PRIMARY KEY auto_increment
   ); 
 ```
@@ -58,7 +50,7 @@ CREATE TABLE user
   (
      userid            INT PRIMARY KEY auto_increment,
      username          VARCHAR(100) NOT NULL UNIQUE,
-     isdiscordverified BOOLEAN NOT NULL
+     discordid         VARCHAR(100) UNIQUE
   ); 
 ```
 ```sql
@@ -66,6 +58,10 @@ CREATE TABLE usercards
   (
      cardid INT,
      userid INT,
+     rarity        ENUM ('core', 'rare', 'veryrare', 'epic', 'spec',
+     'vf1edition',
+     'giftgoat',
+     'auto'),
      FOREIGN KEY (cardid) REFERENCES card (cardid),
      FOREIGN KEY (userid) REFERENCES USER (userid) ON DELETE CASCADE
   ) 
