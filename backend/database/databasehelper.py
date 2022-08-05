@@ -16,6 +16,7 @@ db = mysql.connector.connect(
 cursor = db.cursor(buffered=True)
 
 def create_user(username, discordId):
+    print("creating user ")
     cursor.execute("INSERT INTO user (username, discordid) VALUES (%s,%s)", (username,discordId))
     db.commit()
     createdUserId = cursor.lastrowid
@@ -45,12 +46,24 @@ def get_user_by_discord_id(discordId):
     cursor.execute(query)
     allResults = map_user(cursor)
     return allResults[0]
+def get_user_by_username(username):
+    query = f"SELECT * FROM user WHERE username='{username}'"
+    cursor.execute(query)
+    allResults = map_user(cursor)
+    if len(allResults) > 0:
+        return allResults[0]
+    else:
+        return None
 def get_card(cardId):
     return map_cards(cursor.execute(f"SELECT * FROM card WHERE cardId={cardId}"))
 def get_all_cards_for_user(userId):
-    return map_cards(cursor.execute(f"SELECT * FROM usercards WHERE userId={userId}"))
+    query = f"SELECT * FROM usercards WHERE userId={userId}"
+    cursor.execute(query)
+    return map_cards(cursor)
 def get_all_cards():
-    return map_cards(cursor.execute(f"SELECT * FROM card"))
+    query = f"SELECT * FROM card"
+    cursor.execute(query)
+    return map_cards(cursor)
 def empty_cards_table():
     cursor.execute("DELETE FROM card")
 
@@ -64,8 +77,7 @@ def map_user(cursorUserResult):
     else:
         print("Cursor returned no values")
         return None
-def map_cards(cursorCardResult):
-    
+def map_cards(cursorCardResult): 
     if cursorCardResult:
         cards = [] 
         for x in cursorCardResult:
@@ -104,5 +116,5 @@ class CardRarity(Enum):
     GIFTGOAT = 7
     AUTO = 8
 
-# user = get_user_by_discord_id("209417071845441536")
-# print("x")
+alcc = get_all_cards()
+print("x")
