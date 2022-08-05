@@ -10,8 +10,9 @@ load_dotenv()
 
 discordToken = os.getenv("DISCORD_TOKEN")
 discordClientSecret = os.getenv("DISCORD_CLIENT_SECRET")
+clientID = os.getenv("DISCORD_CLIENT_ID")
 REDIRECT_URI = 'http://localhost:8000/oauth/callback'
-OATH_URL = f'https://discord.com/api/oauth2/authorize?client_id=1004492570887471106&redirect_uri={parse.quote(REDIRECT_URI)}&response_type=code&scope=identify'
+OATH_URL = f'https://discord.com/api/oauth2/authorize?client_id={clientID}&redirect_uri={parse.quote(REDIRECT_URI)}&response_type=code&scope=identify'
 
 
 client = APIClient(discordToken, client_secret=discordClientSecret)
