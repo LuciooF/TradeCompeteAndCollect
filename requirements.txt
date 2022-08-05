@@ -4,5 +4,6 @@ numpy==1.23.1
 pandas==1.4.3
 python-dotenv==0.19.1
 zenora
+django-cors-headers
 
 
