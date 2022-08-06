@@ -2,7 +2,7 @@ import pandas as pd
 
 from databasehelper import * 
 
-data = pd.read_csv('backend/database/PopulateCardsTableData/allValues.csv')
+data = pd.read_csv('database/PopulateCardsTableData/allValues.csv')
 allCards = []
 empty_cards_table()
 #Note this data is still not full, but good enough for testing
