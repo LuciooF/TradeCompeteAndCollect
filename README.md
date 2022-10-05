@@ -1,7 +1,7 @@
 
 # TradeCompeteAndCollect
 
-This project is an OpenSource project with very basic (junior level) code to create a 
+This project is an OpenSource project with very basic code to create a 
 simple website with the goal of easing the trade process of Compete And Collect cards (These are cards related to GaryVee and his Veefriends NFT project.)
 
 
