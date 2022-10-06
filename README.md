@@ -28,7 +28,7 @@ Create a dev branch and have fun with it!
 
 ## Setup
 
-To get this set up, download MySQL, setup as default, take note of your host, password and database name
+To get this set up, download MySQL (Windows download [Link](https://dev.mysql.com/downloads/installer/)) , setup as default, take note of your host, password and database name
 
 Change remove the .example from .env.example file and fill out those variables with your personal keys.
 
