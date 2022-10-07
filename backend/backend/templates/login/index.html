@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% comment %} <link rel="stylesheet" type="text/css" href="style.css"> {% endcomment %}
+    </head>
+    <body>
+        <h1>Compete and Collect Trader</h1>
+        <h4>Login with discord or create a username to start building your deck, which you then can share to other people, to ease trading!</h4>
+        {% if current_user%}
+            <p>Logged in!</p>
+            <a href='/logout'><button>Logout</button></a>
+            {%else%}
+            <a href={{oath_url}}><button>Log in With Discord</button></a>
+            <br>
+            <br>
+            <input type="text" placeholder="Username" id="userSearchId"><input type="button" value="Open/Create temporary user" onclick="searchOrCreateUser()">
+        {%endif%}
+        <br>
+        <p>Note: Users that do not log in with discord are temporary and public, meaning they will get deleted 24 hours after creation, and anyone can edit your deck.</p>
+      </body>
+</html>
+<script>
+    function searchOrCreateUser(){
+        var userId = document.getElementById("userSearchId").value;
+        if (userId.length === 0){
+            return
+        }
+        else{
+            var url = "/searchcreatetemporaryuser?username="+userId;
+            window.location=url;
+        }
+    }
+</script>

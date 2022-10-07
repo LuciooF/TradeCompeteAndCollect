@@ -30,7 +30,6 @@ def discord_login_callback(request):
     discordId = str(current_user.id)
     user=None
     try:
-        print(f"Discord id {discordId}")
         user = get_user_by_discord_id(discordId)
         if user == None:
             username = current_user.username +"#"+ current_user.discriminator
@@ -45,23 +44,42 @@ def home(request):
     if 'access_token' in request.session:
         bearer_client = APIClient(request.session['access_token'], bearer=True)
         current_user = bearer_client.users.get_current_user()
+        user = get_user_by_discord_id(str(current_user.id))
+        return redirect(f"/profile/?user_id={user.userId}")
+    else:
         context = {
-        'current_user': current_user,
+            'oath_url': OATH_URL,
         }
         return HttpResponse(template.render(context,request))
-    context = {
-        'oath_url': OATH_URL,
-    }
-    return HttpResponse(template.render(context,request))
 def logout(request):
     request.session.clear()
     return redirect("/")
 
 def search_create_temporary_user(request):
     username = request.GET.get('username')
-    return HttpResponse("Creating user")
+    user=None
+    try:
+        user = get_user_by_username(username)
+        print("User not found so creatingo ne")
+        if user == None:
+            discordId = None
+            user = create_user(username,discordId)
+            print(user.username)
+        return redirect(f"/profile/?user_id={user.userId}")
+    except Exception as ex:
+        print(ex)
+        return HttpResponseBadRequest(f"Some unexpected error has happened" + str(ex))
 def profile(request):
+    template = loader.get_template('profile.html')
     userId = request.GET.get('user_id')
-    print(userId)
     user = get_user(userId)
-    return HttpResponse(f"Hi user {user.username}")
+    userCards = get_all_cards_for_user(userId)
+    allCards = get_all_cards()
+    context = {
+            'user': user,
+            "userCards" : userCards,
+            "allCards":allCards
+        }
+    if 'access_token' in request.session:
+        context["session"] = True
+    return HttpResponse(template.render(context,request))
