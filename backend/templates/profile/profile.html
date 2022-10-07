@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        {% if session%}
+        <div>
+        <a href='/logout'><button>Logout</button></a>
+        </div>
+        {%endif%}
+        <br>
+        <p>Hi {{user.username}} :D</p>
+        <br>
+        <div style="float:left">
+            <h2>Your cards</h2>
+            <table>
+                <tr>
+                    <th>Img</th>
+                    <th>Character</th>
+                    <th>Score</th>
+                    <th>Rarity</th>
+                    <th>Quantity</th>
+                </tr>
+                {{foreach card in userCards}}
+                <tr>
+                    <td><img src={{card.coreimageLink}} style="width:50px;height:50px;"></td>
+                    <td>{{veefriend}}</td>
+                    <td>{{score}}</td>
+                    <td>{{rarity}}</td>
+                    <td>{{quantity}}<td>
+                </td>
+            </table>
+        </div>
+        <div style="float:right">
+            <h2>All cards</h2>
+            <table>
+                <tr>
+                    <th>Img</th>
+                    <th>Character</th>
+                    <th>Score</th>
+                    <th>Rarity</th>
+                    <th></th>
+                </tr>
+                {{foreach card in allCards}}
+                <tr>
+                    <td><img src={{card.coreimageLink}} style="width:50px;height:50px;"></td>
+                    <td>{{veefriend}}</td>
+                    <td>{{score}}</td>
+                    <td>
+                        <select name="rarity" id="rarity">
+                        <option value="core">Core</option>
+                        <option value="rare">Rare</option>
+                        <option value="veryrare">Very Rare</option>
+                        <option value="epic">Epic</option>
+                        <option value="vf1edition">Vf1 Edition</option>
+                        <option value="giftgoat">Gift Goat</option>
+                        <option value="auto">Auto</option>
+                    </td>
+                    <td><button>+</button></td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

@@ -53,11 +53,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+LOGIN_TEMPLATE_DIR = os.path.join(BASE_DIR, "backend/templates/login")
+PROFILE_TEMPLATE_DIR = os.path.join(BASE_DIR, "backend/templates/profile")
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],
+        'DIRS': [LOGIN_TEMPLATE_DIR, PROFILE_TEMPLATE_DIR, ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
