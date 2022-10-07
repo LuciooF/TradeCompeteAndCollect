@@ -46,14 +46,28 @@ def get_user_by_discord_id(discordId):
     allResults = map_user(cursor)
     return allResults[0]
 def get_card(cardId):
-    return map_cards(cursor.execute(f"SELECT * FROM card WHERE cardId={cardId}"))
+    query = f"SELECT * FROM card WHERE cardId={cardId}"
+    cursor.execute(query)
+    return map_cards(cursor)
 def get_all_cards_for_user(userId):
-    return map_cards(cursor.execute(f"SELECT * FROM usercards WHERE userId={userId}"))
+    query = f"SELECT * FROM usercards WHERE userId={userId}"
+    cursor.execute(query)
+    alluserCards = map_usercards(cursor)
+    allCards = []
+    for userCard in alluserCards:
+        card = get_card(userCard.cardId)
+        allCards.append(card)
+    return allCards
 def get_all_cards():
-    return map_cards(cursor.execute(f"SELECT * FROM card"))
+    query = "SELECT * FROM card"
+    cursor.execute(query)
+    return map_cards(cursor)
 def empty_cards_table():
     cursor.execute("DELETE FROM card")
-
+def empty_usercards_table():
+    cursor.execute("DELETE FROM usercards")
+def empty_user_table():
+    cursor.execute("DELETE FROM card")  
 #mapping
 def map_user(cursorUserResult):
     if cursorUserResult:
@@ -64,12 +78,22 @@ def map_user(cursorUserResult):
     else:
         print("Cursor returned no values")
         return None
+def map_usercards(cursorUserCardsResult):
+    if cursorUserCardsResult:
+        userCards = [] 
+        for x in cursorUserCardsResult:
+            userCards.append(UserCards(x[0],x[1],x[2]))
+        return userCards
+    else:
+        print("Cursor returned no values")
+        return None
 def map_cards(cursorCardResult):
     
     if cursorCardResult:
         cards = [] 
         for x in cursorCardResult:
-            cards.append(Card(x[6],x[0],x[1],x[2],x[3],x[4],x[6]))
+            thisCard = Card(x[6],x[0],x[1],x[2],x[3],x[4],x[6])
+            cards.append(thisCard)
         return cards
     else:
         print("Cursor returned no values")
@@ -85,9 +109,12 @@ class Card:
         self.aura = aura
         self.skill = skill
         self.stamina = stamina
-        
-        
-        
+
+class UserCards:      
+    def __init__(self,cardId, userId, rarity):
+        self.cardId = cardId
+        self.userId = userId
+        self.rarity = rarity
 class User:
     def __init__(self,userId, username, isDiscordVerified):
         self.userId = userId
