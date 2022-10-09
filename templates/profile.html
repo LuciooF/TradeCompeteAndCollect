@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <p>You've successfully logged in!</p>
+        <br>
+        <p>You're in your profile page</p>
+        <a href='/logout'><button>Logout</button></a>
+        <table>
+            <tr v-for="(item,i) in allCards">
+                <td>card name {{i}}</td>
+            </tr>
+        </table>
+        <div id="app_basic" v-bind:title="timestamp" class="experiment-block">{{ message }}</div>
+    </body>
+</html>
+<script>
+    new Vue({
+      el: "#app_basic",
+      data: {
+        message: "🐵 Hello World 🔮",
+        timestamp: `Timestamp ${new Date().toLocaleString()}`,
+      },
+    })
+  </script>
