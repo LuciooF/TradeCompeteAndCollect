@@ -45,7 +45,10 @@ def get_user_by_discord_id(discordId):
     query = f"SELECT * FROM user WHERE discordId={discordId}"
     cursor.execute(query)
     allResults = map_user(cursor)
-    return allResults[0]
+    if len(allResults) > 0:
+        return allResults[0]
+    else:
+        return None
 def get_user_by_username(username):
     query = f"SELECT * FROM user WHERE username='{username}'"
     cursor.execute(query)
